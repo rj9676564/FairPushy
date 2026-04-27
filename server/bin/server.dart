@@ -11,7 +11,7 @@ void main() async {
   LoggerInit();
 
   // Create  settings file.
-  SettingsYaml.fromString(content: settingsYaml, filePath: 'settings.yaml')
+  SettingsYaml.fromString(content: buildSettingsYaml(), filePath: 'settings.yaml')
       .save();
 
   /// Initialise the db pool

@@ -2,6 +2,13 @@
 <img src="server.png" alt="image-20220728185624137" style="zoom:67%; float:left" />
 
 整体从初次接触Server开发者角度分析主要分为两个流程开发阶段和部署阶段
+
+#### Docker / CI 部署
+
+如果要通过 Docker 发布，并使用 GitHub Actions 自动产出镜像，请直接查看：
+
+[基于Docker容器部署dart服务端项目大体流程.md](</Users/laibin/Documents/UGit/FairPushy/server/基于Docker容器部署dart服务端项目大体流程.md>)
+
 #### 同步FairPushy Server工程代码
 
 推荐同步相关代码，并且修改本地配置信息进行部署：
@@ -62,7 +69,6 @@ CREATE TABLE：[表结构](db_fair_dynamic_table.txt
 | 3 |    /web/module_patch | 补丁列表   |
 | 4 |    /web/create_patch  | 上传补丁   |
 | 5 |    /web/operating_record  | 操作记录   |
-
 
 
 

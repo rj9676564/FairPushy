@@ -5,6 +5,12 @@
 
 Fair 热更新平台是配合Fair 核心能力生态组成的一部分，可以让用户使用可视化的操作方式来配套使用Fair 的动态能力，目前已经完成一期，目前支持项目的创建，针对项目创建对应的资源包，实现下发资源，客户端再通过生成的url 来获取资源文件，实现Fair的动态化能力。大概样式如下图
 
+##### Docker / CI 部署
+
+如果要通过 Docker 发布，并使用 GitHub Actions 自动产出镜像，请直接查看：
+
+[基于Docker容器部署flutter web项目大体流程.md](</Users/laibin/Documents/UGit/FairPushy/web/基于Docker容器部署flutter web项目大体流程.md>)
+
 <img src="images/image-20220728185532870.png" alt="image-20220728185532870" style="zoom:67%; float:left" />
 
 一期只是从项目和资源俩个维度来支持Fair 的动态化能力。要使用平台完成下发，首先需要创建一个项目，目前没有做用户鉴权，平台功能也已跑通整个流程为主，注意创建完的项目对所有用户可见，所以建议平台只是用来验证测试动态能力为主，不建议生产环境使用。
