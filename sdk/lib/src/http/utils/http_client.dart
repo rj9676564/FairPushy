@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:dio/adapter.dart';
+import 'dart:io' as io;
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 import '../../files/fair_file.dart';
 import '../abstract_parser.dart';
 import '../base_response.dart';
@@ -28,7 +29,7 @@ class HttpClient {
         var response = await dio.request(url,
             queryParameters: params, options: options, cancelToken: token);
         return _parse<T>(response, parser: parser);
-      } on DioError catch (e) {
+      } on DioException catch (e) {
         var response = FResponse<T>(url: url, code: TimeOut, e: e);
         formatError(e, response);
         return response;
@@ -116,7 +117,7 @@ class HttpClient {
           code: code,
           data: savePath,
           e: code == Success ? null : Exception(response.statusMessage));
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       var response = FResponse<String>(url: url, code: TimeOut, e: e);
       formatError(e, response);
       return response;
@@ -134,8 +135,8 @@ class HttpClient {
 
   static Dio _initCert() {
     var dio = Dio();
-    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
-        (client) {
+    (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient = () {
+      final client = io.HttpClient();
       client.connectionTimeout = Duration(seconds: 5);
       client.badCertificateCallback =
           (X509Certificate cert, String host, int port) {
@@ -155,8 +156,8 @@ class HttpClient {
 
   static Options _initOptions() {
     var options = Options();
-    options.sendTimeout = 5000;
-    options.receiveTimeout = 5000;
+    options.sendTimeout = const Duration(milliseconds: 5000);
+    options.receiveTimeout = const Duration(milliseconds: 5000);
     Map<String, dynamic> header = {};
     options.headers = header;
     return options;
@@ -168,20 +169,20 @@ class HttpClient {
     return list;
   }
 
-  static void formatError(DioError e, FResponse response) {
-    if (e.type == DioErrorType.connectTimeout) {
+  static void formatError(DioException e, FResponse response) {
+    if (e.type == DioExceptionType.connectionTimeout) {
       Logger.logi("连接超时");
       response.code = TimeOut;
-    } else if (e.type == DioErrorType.sendTimeout) {
+    } else if (e.type == DioExceptionType.sendTimeout) {
       Logger.logi("请求超时");
       response.code = TimeOut;
-    } else if (e.type == DioErrorType.receiveTimeout) {
+    } else if (e.type == DioExceptionType.receiveTimeout) {
       Logger.logi("响应超时");
       response.code = TimeOut;
-    } else if (e.type == DioErrorType.response) {
+    } else if (e.type == DioExceptionType.badResponse) {
       Logger.logi("出现异常");
       response.code = Failure;
-    } else if (e.type == DioErrorType.cancel) {
+    } else if (e.type == DioExceptionType.cancel) {
       Logger.logi("请求取消");
       response.code = Cancel;
     } else {

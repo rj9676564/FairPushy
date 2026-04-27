@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'base_cache.dart';
 
 const int kCacheMaxCount = 20; //最多缓存20个
@@ -13,8 +12,7 @@ class VersionsCache extends FairCache {
   }
 
   //保存modulename下的版本号和需要更新的文件
-  Future saveVersionConfig(String? bundleid,
-      {@required String? version}) async {
+  Future saveVersionConfig(String? bundleid, {required String? version}) async {
     if (bundleid == null || bundleid.isEmpty || version == null) return;
     Map value = {
       "version": version,
@@ -41,7 +39,7 @@ class VersionsCache extends FairCache {
     String minKey = "";
     double minTime = 0;
     for (var key in map.keys) {
-      if (!(map[key] is Map)) {
+      if (map[key] is! Map) {
         continue;
       }
       Map value = map[key] as Map;

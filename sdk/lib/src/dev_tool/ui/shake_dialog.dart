@@ -6,19 +6,15 @@ import 'package:flutter/material.dart';
 typedef DismissCallback = void Function();
 
 class ShakeDialog extends StatefulWidget {
-  DismissCallback? onDismiss;
+  final DismissCallback? onDismiss;
 
-  ShakeDialog({Key? key, this.onDismiss}) : super(key: key);
+  const ShakeDialog({super.key, this.onDismiss});
 
   @override
-  State<ShakeDialog> createState() => _ShakeDialogState(onDismiss);
+  State<ShakeDialog> createState() => _ShakeDialogState();
 }
 
 class _ShakeDialogState extends State<ShakeDialog> {
-  _ShakeDialogState(this.onDismiss);
-
-  DismissCallback? onDismiss;
-
   bool _loading = false;
 
   @override
@@ -81,6 +77,10 @@ class _ShakeDialogState extends State<ShakeDialog> {
     final localHost = await SPUtils.getLocalHost();
     await Delegate.updateDebugFW(localHost!);
     changeLoadingState(false);
+    if (!mounted) {
+      widget.onDismiss?.call();
+      return;
+    }
     Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
             settings: RouteSettings(name: "BundleListPage"),
@@ -91,7 +91,7 @@ class _ShakeDialogState extends State<ShakeDialog> {
             }), (Route<dynamic> route) {
       return route.settings.name == "DevToolPage";
     });
-    onDismiss?.call();
+    widget.onDismiss?.call();
   }
 
   void changeLoadingState(bool isLoading) {
@@ -103,6 +103,6 @@ class _ShakeDialogState extends State<ShakeDialog> {
   @override
   void dispose() {
     super.dispose();
-    onDismiss?.call();
+    widget.onDismiss?.call();
   }
 }

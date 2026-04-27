@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DevToolItem extends StatelessWidget {
-  String? title;
-  Widget? child;
+  final String? title;
+  final Widget child;
 
-  DevToolItem({Key? key, this.title, required this.child}) : super(key: key);
+  const DevToolItem({super.key, this.title, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class DevToolItem extends StatelessWidget {
             padding: title?.isNotEmpty == true
                 ? const EdgeInsets.only(left: 15)
                 : EdgeInsets.zero,
-            child: child == null ? Container() : child!,
+            child: child,
           ),
         ],
       ),

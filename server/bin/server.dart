@@ -1,18 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:HotUpdateService/server/fair_server_pages.dart';
 import 'package:HotUpdateService/server/src/get_server.dart';
 import 'package:HotUpdateService/utils/fair_logger.dart';
-import 'package:settings_yaml/settings_yaml.dart';
 import 'package:simple_mysql_orm/simple_mysql_orm.dart';
 import 'config.dart';
 
 void main() async {
   LoggerInit();
 
-  // Create  settings file.
-  SettingsYaml.fromString(content: buildSettingsYaml(), filePath: 'settings.yaml')
-      .save();
+  // 将环境变量写入 settings.yaml，供 simple_mysql_orm 初始化连接池。
+  File('settings.yaml').writeAsStringSync(buildSettingsYaml());
 
   /// Initialise the db pool
   DbPool.fromSettings(pathToSettings: 'settings.yaml');

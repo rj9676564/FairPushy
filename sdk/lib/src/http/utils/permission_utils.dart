@@ -4,21 +4,21 @@ import 'package:permission_handler/permission_handler.dart';
 
 class PermissionUtils {
   Future<PermissionResult> checkPermission(PermissionEnum permission) async {
-    var serviceStatus = await Permission.storage.status;
+    PermissionStatus permissionStatus = await Permission.storage.status;
     switch (permission) {
       case PermissionEnum.FILE_READ:
       case PermissionEnum.FILE_WRITE:
-        serviceStatus = await Permission.storage.status;
+        permissionStatus = await Permission.storage.status;
         break;
       case PermissionEnum.INTERNET:
-        serviceStatus = await Permission.storage.status;
+        permissionStatus = await Permission.storage.status;
         break;
     }
 
-    if (ServiceStatus.enabled == serviceStatus) {
+    if (permissionStatus.isGranted) {
       return PermissionResult.GRANTED;
     }
-    return PermissionResult.GRANTED;
+    return PermissionResult.DENIED;
   }
 }
 

@@ -4,26 +4,26 @@ version: 0.0.1
 homepage: https://github.com/wuba/FairPushy/tree/main/sdk
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.17.0"
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.41.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  path_provider: ^2.0.4   #文件路径相关
-  archive: ^3.3.0  #压缩，解压缩相关
-  permission_handler: 6.0.1
-  dio: ^4.0.6
-  shared_preferences: ^2.0.15
+  path_provider: ^2.0.15   #文件路径相关
+  archive: ^3.6.1  #压缩，解压缩相关
+  permission_handler: ^12.0.1
+  dio: ^5.9.2
+  shared_preferences: ^2.5.3
   #摇一摇重力感应
-  sensors_plus: ^1.4.1
+  sensors_plus: ^7.0.0
   #扫描二维码
-  qr_code_scanner: any
+  qr_code_scanner: ^1.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # flutter_lints: ^1.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true

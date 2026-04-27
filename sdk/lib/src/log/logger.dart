@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 class Logger {
-  static log(Object msg) {
-    debugPrint('【FairPushy】：' + msg.toString());
+  static void log(Object msg) {
+    debugPrint('【FairPushy】：${msg.toString()}');
   }
 
-  static logi(String msg) {
-    debugPrint("【FairPushy】：" + msg);
+  static void logi(String msg) {
+    debugPrint("【FairPushy】：$msg");
   }
 }

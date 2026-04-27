@@ -7,9 +7,9 @@ import 'package:fair_pushy/fair_pushy.dart';
 import 'package:sensors_plus/sensors_plus.dart';
 
 class BundleListPage extends StatefulWidget {
-  String? bundleId;
+  final String? bundleId;
 
-  BundleListPage({required this.bundleId, Key? key}) : super(key: key);
+  const BundleListPage({required this.bundleId, super.key});
 
   @override
   State<BundleListPage> createState() => _BundleListPageState();
@@ -41,13 +41,14 @@ class _BundleListPageState extends State<BundleListPage> {
 
   void _registerSensorListener() {
     _streamSubscriptions
-        .add(accelerometerEvents.listen((AccelerometerEvent event) async {
+        .add(accelerometerEventStream().listen((AccelerometerEvent event) async {
       int value = 20;
       if (event.x.abs() > value ||
           event.y.abs() > value ||
           event.z.abs() > value) {
         if (!_isShow) {
           _isShow = true;
+          if (!mounted) return;
           await showDialog<bool>(
             builder: (BuildContext context) {
               return ShakeDialog(
@@ -90,7 +91,7 @@ class _BundleListPageState extends State<BundleListPage> {
                     return FairDevTools.fairWidgetBuilder(getPageName(item), item);
                   }));
                 },
-                child: Container(
+                child: SizedBox(
                   height: 50,
                   child: Stack(
                     children: [
@@ -123,9 +124,9 @@ class _BundleListPageState extends State<BundleListPage> {
     );
   }
 
-  String getPageName(path) {
+  String getPageName(String path) {
     final split = path.split("/");
-    var pageSuffix;
+    late final String pageSuffix;
     if (path.endsWith(Delegate.Debug_suffix)) {
       pageSuffix = Delegate.Debug_suffix;
     } else if (path.endsWith(Delegate.Release_suffix)) {
@@ -137,10 +138,9 @@ class _BundleListPageState extends State<BundleListPage> {
   }
 
 }
-
 class RouteItem {
-  final name;
-  final routePath;
+  final String name;
+  final String routePath;
 
   RouteItem(this.name, this.routePath);
 }

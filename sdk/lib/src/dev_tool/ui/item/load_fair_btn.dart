@@ -12,31 +12,40 @@ class LoadFairBtn extends StatelessWidget {
    */
   Future _loadBundle(BuildContext context) async {
     final devToolMode = DevToolMode.of(context)!;
-    String selectMode = devToolMode.selectMode.value;
-    Code code;
+    final selectMode = devToolMode.selectMode.value;
+    late final Code code;
     if (selectMode == DevToolMode.MODE_ONLINE) {
+      final selectedEnv = devToolMode.selectOnlineEnv.value;
+      final bundleId = devToolMode.bundleId;
+      if (selectedEnv?.updateUrl == null || bundleId == null) {
+        return;
+      }
       code = await devToolMode.loadFairAssetsOnline(
-          devToolMode.selectOnlineEnv.value.updateUrl,
-          devToolMode.bundleId.value!);
+          selectedEnv!.updateUrl!,
+          bundleId);
       if (code == Code.success) {
         SPUtils.recordBundleIdByEnv(
-            devToolMode.bundleId, devToolMode.selectOnlineEnv.value.envName);
+            bundleId, selectedEnv.envName);
       }
     } else {
+      final localHost = devToolMode.localModeHost.value;
+      if (localHost == null) {
+        return;
+      }
       code = await devToolMode
-          .loadFairAssetsLocal(devToolMode.localModeHost.value);
+          .loadFairAssetsLocal(localHost);
       if (code == Code.success) {
-        SPUtils.recordLocalHost(devToolMode.localModeHost.value);
+        SPUtils.recordLocalHost(localHost);
       }
     }
   }
 
   void _jumpBundle(BuildContext context) {
     final devToolMode = DevToolMode.of(context)!;
-    String selectMode = devToolMode.selectMode.value;
-    String? bundleId = null;
+    final selectMode = devToolMode.selectMode.value;
+    String? bundleId;
     if (selectMode == DevToolMode.MODE_ONLINE) {
-      bundleId = devToolMode.bundleId.value!;
+      bundleId = devToolMode.bundleId;
     }
     Navigator.of(context).push<void>(MaterialPageRoute(
         settings: RouteSettings(name: "BundleListPage"),

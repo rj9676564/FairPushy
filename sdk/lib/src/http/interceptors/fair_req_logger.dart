@@ -8,7 +8,7 @@ class FairReqLogger extends LogInterceptor {
   }
 
   @override
-  void onError(DioError err, ErrorInterceptorHandler handler) {
+  void onError(DioException err, ErrorInterceptorHandler handler) {
     // Logger.logi("@@@-onError, err: " + err.message);
     handler.next(err);
   }

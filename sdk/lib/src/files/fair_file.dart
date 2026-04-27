@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'cache.dart';
 import 'package:path_provider/path_provider.dart';
 import '../log/logger.dart';
@@ -12,7 +11,7 @@ const String _pushy_floder_path = "fairPushy";
 class FairFile {
   //获取下载文件的位置
   static Future<String> getDownloadSavePath(
-      {@required String? moduleName, bool withZipSuffix = true}) async {
+      {required String? moduleName, bool withZipSuffix = true}) async {
     String? path = await getSaveFilesFolderPath();
     return "$path/${moduleName}${withZipSuffix ? ".zip" : ""}";
   }
@@ -60,7 +59,7 @@ class FairFile {
 
   //删除modulename对应的所有老的文件
   static void removeOldFiles(
-      {@required String? moduleName, List<String>? newNames}) async {
+      {required String? moduleName, List<String>? newNames}) async {
     if (moduleName == null || newNames == null) return;
     //得到老的配置
     var value = await VersionsCache.instance.getValueForKey(moduleName);

@@ -1,5 +1,4 @@
 import 'package:archive/archive_io.dart';
-import 'package:flutter/material.dart';
 import 'cache.dart';
 import 'dart:io';
 import 'fair_file.dart';
@@ -7,7 +6,7 @@ import '../log/logger.dart';
 
 //加压缩文件，并且更新cache
 Future<bool> unZipAndUpdateCache(
-    {@required String? zipPath, String? bundleId, String? version}) async {
+    {required String? zipPath, String? bundleId, String? version}) async {
   List<String>? newFileNames =
       await unZip(zipPath: zipPath, bundleId: bundleId);
   if (newFileNames == null) {
@@ -22,7 +21,7 @@ Future<bool> unZipAndUpdateCache(
 //解压缩
 //返回解压缩之后的所有文件名
 Future<List<String>?> unZip(
-    {@required String? zipPath, @required String? bundleId}) async {
+    {required String? zipPath, required String? bundleId}) async {
   if (zipPath == null || zipPath.isEmpty) {
     Logger.logi("文件路径不能为空");
     return null;

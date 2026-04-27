@@ -11,13 +11,13 @@ class OnlineHostItem extends StatefulWidget {
 }
 
 class _OnlineHostItemState extends State<OnlineHostItem> {
-  late TextEditingController _UrlController;
+  late TextEditingController _urlController;
   late TextEditingController _bundleIdController;
 
   @override
   void initState() {
     super.initState();
-    _UrlController = TextEditingController();
+    _urlController = TextEditingController();
     _bundleIdController = TextEditingController();
   }
 
@@ -30,9 +30,10 @@ class _OnlineHostItemState extends State<OnlineHostItem> {
               valueListenable: DevToolMode.of(context)!.selectOnlineEnv,
               builder: (context, env, child) {
                 final show = mode == DevToolMode.MODE_ONLINE && env != null;
-                _UrlController.text = env?.updateUrl ?? "";
+                _urlController.text = env?.updateUrl ?? "";
                 if (show && env != null) {
                   SPUtils.getBundleIdByEnv(env.envName).then((value) {
+                    if (!mounted) return;
                     DevToolMode.of(context)!.bundleId = value ?? "";
                     _bundleIdController.text = value ?? "";
                   });
@@ -47,7 +48,7 @@ class _OnlineHostItemState extends State<OnlineHostItem> {
                             width: 200,
                             child: TextField(
                               enabled: env?.readOnly == false,
-                              controller: _UrlController,
+                              controller: _urlController,
                               style: TextStyle(
                                   color: env?.readOnly == true
                                       ? Colors.grey
@@ -101,8 +102,10 @@ class _LocalHostItemState extends State<LocalHostItem> {
         builder: (context, mode, child) {
           final show = mode == DevToolMode.MODE_LOCAL;
           if (show) {
-            SPUtils.getLocalHost()
-                .then((value) => _localHostController.text = value ?? "");
+            SPUtils.getLocalHost().then((value) {
+              if (!mounted) return;
+              _localHostController.text = value ?? "";
+            });
           }
           return Visibility(
               visible: show,

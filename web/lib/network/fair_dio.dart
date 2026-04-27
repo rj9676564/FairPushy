@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'base_result.dart';
 
 class FairDio {
-  static const String baseUrl = 'http://127.0.0.1:8080/'; //测试地址
-  static const String uploadBaseUrl = 'http://127.0.0.1:8080/'; //上传文件
+  static const String baseUrl = '/api/'; // 通过 Nginx 反代转发到 server 容器
+  static const String uploadBaseUrl = '/api/'; // 上传文件同样走反代
 
   static const String baseUrlTo58 = ''; //测试环境
 
@@ -32,8 +32,8 @@ class FairDio {
   FairDio() {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
-      connectTimeout: connectTimeout,
-      receiveTimeout: receiveTimeout,
+      connectTimeout: Duration(milliseconds: connectTimeout),
+      receiveTimeout: Duration(milliseconds: receiveTimeout),
       responseType: ResponseType.plain,
       headers: {
         "Access-Control-Allow-Origin": "*",
@@ -178,7 +178,7 @@ class FairDio {
       } else {
         return Future.value(BaseResult(message: 'error method', status: '-1'));
       }
-    } on DioError catch (error) {
+    } on DioException catch (error) {
       debugPrint(error.response.toString());
       formatError(error);
       return Future.value(BaseResult(
@@ -214,7 +214,7 @@ class FairDio {
           onReceiveProgress!(count, total);
         },
       );
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       debugPrint(e.response.toString());
       formatError(e);
     }
@@ -224,7 +224,7 @@ class FairDio {
 
   /// 上传文件
   Future<Response?> uploadFile(String path,
-      {String baseUrl = baseUrl, @required FormData? data}) async {
+      {String baseUrl = baseUrl, required FormData? data}) async {
     /// 打印请求相关信息：请求地址、请求方式、请求参数
     debugPrint("请求地址：【$baseUrl$path】");
     debugPrint('请求参数：' + data.toString());
@@ -256,7 +256,7 @@ class FairDio {
 
       /// Http status code.
       debugPrint('请求成功!response.statusCode：${response.statusCode}');
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       debugPrint(e.response.toString());
       formatError(e);
     }
@@ -265,20 +265,20 @@ class FairDio {
   }
 
   /// error统一处理
-  void formatError(DioError e) {
-    if (e.type == DioErrorType.connectTimeout) {
+  void formatError(DioException e) {
+    if (e.type == DioExceptionType.connectionTimeout) {
       // It occurs when url is opened timeout.
       debugPrint("连接超时");
-    } else if (e.type == DioErrorType.sendTimeout) {
+    } else if (e.type == DioExceptionType.sendTimeout) {
       // It occurs when url is sent timeout.
       debugPrint("请求超时");
-    } else if (e.type == DioErrorType.receiveTimeout) {
+    } else if (e.type == DioExceptionType.receiveTimeout) {
       //It occurs when receiving timeout
       debugPrint("响应超时");
-    } else if (e.type == DioErrorType.response) {
+    } else if (e.type == DioExceptionType.badResponse) {
       // When the server response, but with a incorrect status, such as 404, 503...
       debugPrint("出现异常");
-    } else if (e.type == DioErrorType.cancel) {
+    } else if (e.type == DioExceptionType.cancel) {
       // When the request is cancelled, dio will throw a error with this type.
       debugPrint("请求取消");
     } else {
@@ -316,7 +316,7 @@ class FairDio {
           onReceiveProgress: (int count, int total) {},
           onSendProgress: (int count, int total) {},
           cancelToken: cancelToken);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       formatError(e);
     }
     return response;

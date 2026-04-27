@@ -12,12 +12,12 @@ class Toast {
     _startedTime = DateTime.now();
     _showTime = showtime;
 
-    OverlayState? overlayState = Overlay.of(context);
+    final overlayState = Overlay.of(context);
     _showing = true;
     if (_overlayEntry == null) {
       _overlayEntry =
           OverlayEntry(builder: (context) => _buildOverlayEntry(context));
-      overlayState?.insert(_overlayEntry!);
+      overlayState.insert(_overlayEntry!);
     } else {
       //重新绘制UI，类似setState
       _overlayEntry?.markNeedsBuild();

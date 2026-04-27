@@ -16,12 +16,12 @@ class FairRequesterConstants {
 
   //打包平台在线构建接口
   static String onlineBuildInPackingPlatform() {
-    return "/app/onlineBuild/";
+    return "/web/onlineBuild";
   }
 
   //打包平台检查构建状态
   static String checkBuildStatusInPackingPlatform() {
-    return "/app/checkBuildStatus/";
+    return "/web/checkBuildStatus";
   }
 
 }

@@ -1,4 +1,3 @@
-import 'package:fair_pushy/fair_pushy.dart';
 import 'package:fair_pushy/src/delegate.dart';
 import 'package:fair_pushy/src/dev_tool/utils/sp_utils.dart';
 import 'package:flutter/material.dart';
@@ -10,9 +9,9 @@ class DevToolMode extends InheritedWidget {
   ///选择的模式
   final ValueNotifier<String?> _selectMode = ValueNotifier(null);
 
-  get selectMode => _selectMode;
+  ValueNotifier<String?> get selectMode => _selectMode;
 
-  setSelectMode(value) {
+  void setSelectMode(String? value) {
     _selectMode.value = value;
     if (value != null) {
       SPUtils.recordLastSelectMode(value);
@@ -21,11 +20,11 @@ class DevToolMode extends InheritedWidget {
   }
 
   ///选择的线上环境
-  ValueNotifier<OnlineEnvInfo?> _selectOnlineEnv = ValueNotifier(null);
+  final ValueNotifier<OnlineEnvInfo?> _selectOnlineEnv = ValueNotifier(null);
 
-  get selectOnlineEnv => _selectOnlineEnv;
+  ValueNotifier<OnlineEnvInfo?> get selectOnlineEnv => _selectOnlineEnv;
 
-  setSelectOnlineEnv(value) {
+  void setSelectOnlineEnv(OnlineEnvInfo? value) {
     _selectOnlineEnv.value = value;
     if (value != null) {
       SPUtils.recordLastSelectEnv(value.envName);
@@ -36,9 +35,9 @@ class DevToolMode extends InheritedWidget {
   ///本地模式时的host
   final ValueNotifier<String?> _localModeHost = ValueNotifier(null);
 
-  get localModeHost => _localModeHost;
+  ValueNotifier<String?> get localModeHost => _localModeHost;
 
-  setLocalModeHost(value) {
+  void setLocalModeHost(String? value) {
     _localModeHost.value = value;
     notifyParamsChanged();
   }
@@ -47,7 +46,8 @@ class DevToolMode extends InheritedWidget {
   bool _isLoadingFairAssets = false;
 
   ///参数变更通知
-  ValueNotifier<SelectParamsInfo?> selectParamsNotifier = ValueNotifier(null);
+  final ValueNotifier<SelectParamsInfo?> selectParamsNotifier =
+      ValueNotifier(null);
 
   ///所有模式
   List<String> modeList = [MODE_ONLINE, MODE_LOCAL];
@@ -58,15 +58,16 @@ class DevToolMode extends InheritedWidget {
   ///当前输入的bundleId
   final ValueNotifier<String?> _bundleId = ValueNotifier(null);
 
-  get bundleId => _bundleId;
+  ValueNotifier<String?> get bundleIdNotifier => _bundleId;
 
-  set bundleId(value) {
+  String? get bundleId => _bundleId.value;
+
+  set bundleId(String? value) {
     _bundleId.value = value;
     notifyParamsChanged();
   }
 
-  DevToolMode({Key? key, required FairDevConfig? config, required Widget child})
-      : super(key: key, child: child) {
+  DevToolMode({super.key, required FairDevConfig? config, required super.child}) {
     envList = config == null ? {} : config._envList;
     notifyParamsChanged();
     init();
@@ -74,7 +75,7 @@ class DevToolMode extends InheritedWidget {
 
   void init() async {
     _localModeHost.value = await SPUtils.getLocalHost();
-    if (envList.length > 0) {
+    if (envList.isNotEmpty) {
       modeList = [MODE_ONLINE, MODE_LOCAL];
       _selectMode.value = await SPUtils.getLastSelectMode();
     } else {
@@ -97,7 +98,7 @@ class DevToolMode extends InheritedWidget {
 
   ///检测参数是否齐全
   void notifyParamsChanged({bool hasLoadedFairAssets = false}) {
-    SelectParamsInfo selectParamsInfo;
+    late SelectParamsInfo selectParamsInfo;
     switch (_selectMode.value) {
       case MODE_ONLINE:
         if (_selectOnlineEnv.value == null) {
@@ -106,7 +107,7 @@ class DevToolMode extends InheritedWidget {
         } else {
           final paramsCompleted =
               _selectOnlineEnv.value!.updateUrl?.isNotEmpty == true &&
-                  bundleId.value?.isNotEmpty == true;
+                  bundleId?.isNotEmpty == true;
           selectParamsInfo = SelectParamsInfo(
               paramsCompleted,
               "从线上${_selectOnlineEnv.value!.envName}服务器加载",
@@ -162,7 +163,7 @@ class OnlineEnvInfo {
 
 ///Fair开发者配置项
 class FairDevConfig {
-  Set<OnlineEnvInfo> _envList = {};
+  final Set<OnlineEnvInfo> _envList = {};
 
   void addEnv(OnlineEnvInfo env) {
     _envList.add(env);
