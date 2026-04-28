@@ -29,15 +29,21 @@ class LoginPage extends FairServiceWidget {
       return ResponseError(msg: 'User not found');
     }
 
-    if (user.password != AuthUtils.hashPassword(password)) {
+    final currentUser = user!;
+
+    if (currentUser.password != AuthUtils.hashPassword(password)) {
       return ResponseError(msg: 'Invalid password');
     }
 
-    final token = AuthUtils.generateJwt(user.userId, user.username, user.role ?? 'user');
+    final token = AuthUtils.generateJwt(
+      currentUser.userId,
+      currentUser.username,
+      currentUser.role ?? 'user',
+    );
 
     return ResponseSuccess(data: {
       'token': token,
-      'user': user.toJson(),
+      'user': currentUser.toJson(),
     });
   }
 }
