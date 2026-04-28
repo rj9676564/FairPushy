@@ -102,6 +102,11 @@ class ContextResponse {
     return close();
   }
 
+  Future sendBytes(List<int> bytes) async {
+    _response.add(bytes);
+    return close();
+  }
+
   Future sendJson(Object? data) {
     // if (data is Map || data is List) {
     //   data = jsonEncode(data);

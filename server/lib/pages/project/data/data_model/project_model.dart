@@ -16,6 +16,7 @@ class Project extends Entity<Project> implements HandyJSON {
   late String app_description; //项目描述
   late String app_pic_url; //项目图标网络地址
   late DateTime create_time; //创建时间
+  DateTime? update_time; //更新时间
 
   /*
   * 项目模型初始化方法
@@ -25,12 +26,14 @@ class Project extends Entity<Project> implements HandyJSON {
     required String app_description,
     required String app_pic_url,
     required DateTime create_time,
+    DateTime? update_time,
   }) => Project._internal(
     app_id: Entity.notSet,
     app_name: app_name,
     app_description: app_description,
     app_pic_url: app_pic_url,
     create_time: create_time,
+    update_time: update_time,
   );
 
   factory Project.fromRow(Row row) {
@@ -39,6 +42,7 @@ class Project extends Entity<Project> implements HandyJSON {
     final app_description = row.fieldAsString('app_description');
     final app_pic_url = row.fieldAsString('app_pic_url');
     final create_time = row.fieldAsDateTime('create_time');
+    final update_time = row.fieldAsDateTime('update_time');
 
     return Project._internal(
       app_id: app_id,
@@ -46,6 +50,7 @@ class Project extends Entity<Project> implements HandyJSON {
       app_description: app_description,
       app_pic_url: app_pic_url,
       create_time: create_time,
+      update_time: update_time,
     );
   }
 
@@ -55,16 +60,16 @@ class Project extends Entity<Project> implements HandyJSON {
     required this.app_description,
     required this.app_pic_url,
     required this.create_time,
+    this.update_time,
   }) : super(app_id);
-
-
 
   Map<String, dynamic> toJson() => {
     'appId': app_id,
     'appName': app_name,
     'appInfo': app_description,
     'appLogoUrl': app_pic_url,
-    'appCreateTime': create_time.toString(), //数据库create_time格式有问题，暂时先返回常串
+    'appCreateTime': create_time.toString(),
+    'appUpdateTime': update_time?.toString(),
   };
 
   @override
@@ -75,7 +80,8 @@ class Project extends Entity<Project> implements HandyJSON {
     'app_name',
     'app_description',
     'app_pic_url',
-    'create_time'
+    'create_time',
+    'update_time'
   ];
 
   @override
@@ -86,6 +92,7 @@ class Project extends Entity<Project> implements HandyJSON {
     app_name,
     app_description,
     app_pic_url,
-    create_time
+    create_time,
+    update_time
   ];
 }
