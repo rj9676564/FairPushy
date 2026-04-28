@@ -3,7 +3,7 @@ import 'package:HotUpdateService/server/fair_server_response.dart';
 import 'package:HotUpdateService/server/fair_server_widget.dart';
 import 'package:HotUpdateService/utils/config.dart';
 import 'package:path/path.dart' as p;
-import 'package:HotUpdateService/server/src/get_server.dart';
+import 'package:HotUpdateService/utils/storage/storage_factory.dart';
 
 class StorageServePage extends FairServiceWidget {
   @override
@@ -18,15 +18,12 @@ class StorageServePage extends FairServiceWidget {
     if (filename == null) {
       return ResponseError(msg: 'Filename missing').toJson();
     }
-
-    final filePath = p.join(Config.storagePath, filename);
-    final file = File(filePath);
-
-    if (await file.exists()) {
-      req.response?.sendFile(filePath);
-      return {}; // Returning empty map because sendFile closes the response
-    } else {
-      return ResponseError(msg: 'File not found', code: 404).toJson();
+    try {
+      final bytes = await StorageFactory.i.read(filename);
+      req.response?.sendBytes(bytes);
+      return {}; 
+    } catch (e) {
+      return ResponseError(msg: 'File not found: $e', code: 404).toJson();
     }
   }
 }

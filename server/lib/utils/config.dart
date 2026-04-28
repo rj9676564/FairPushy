@@ -52,4 +52,10 @@ class Config {
   static String get cdnFileHost => _readEnv('CDN_FILE_HOST', _defaultCdnFileHost);
   static String get cdnTokenHost => _readEnv('CDN_TOKEN_HOST', _defaultCdnTokenHost);
   static String get storagePath => _readEnv('STORAGE_PATH', _defaultStoragePath);
+
+  static String get storageType => _readEnv('STORAGE_TYPE', 'local'); // local, oss
+  static String get ossEndpoint => _readEnv('OSS_ENDPOINT', '');
+  static String get ossBucket => _readEnv('OSS_BUCKET', '');
+  static String get ossAccessKey => _readEnv('OSS_ACCESS_KEY', '');
+  static String get ossSecretKey => _readEnv('OSS_SECRET_KEY', '');
 }
