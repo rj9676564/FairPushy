@@ -16,7 +16,7 @@
 其中：
 
 - `server/Dockerfile` 负责把 Dart Server 编译成可运行镜像
-- `docker-compose.yml` 负责本地一键拉起 MySQL + Server + Web
+- `docker-compose.yml` 负责本地一键拉起 Server + Web，数据库使用外部 MySQL
 - `docker-images.yml` 负责在 GitHub Actions 中构建并推送镜像
 
 ### 二、数据库环境变量
@@ -125,7 +125,6 @@ docker compose up --build
 
 默认会启动：
 
-- `mysql`：`3306`
 - `server`：`8080`
 - `web`：`8081`
 
@@ -138,4 +137,5 @@ http://127.0.0.1:8081
 注意：
 
 - `docker-compose.yml` 只负责把基础环境拉起来
+- `MYSQL_USER`、`MYSQL_PASSWORD`、`MYSQL_HOST`、`MYSQL_DATABASE` 需要在启动前注入
 - 数据表仍然需要按 `server/README.md` 中的建表说明初始化

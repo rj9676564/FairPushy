@@ -19,7 +19,7 @@
 
 - `web/Dockerfile` 负责 Flutter Web 编译和 Nginx 运行时镜像制作
 - `web/nginx/default.conf` 提供静态站点和单页路由回退配置
-- `docker-compose.yml` 负责本地一键拉起 MySQL + Server + Web
+- `docker-compose.yml` 负责本地一键拉起 Server + Web，数据库使用外部 MySQL
 - `docker-images.yml` 负责在 GitHub Actions 中构建并推送镜像
 
 ### 二、镜像构建方式
@@ -131,9 +131,9 @@ docker compose up --build
 
 - `web`：`http://127.0.0.1:8081`
 - `server`：`http://127.0.0.1:8080`
-- `mysql`：`127.0.0.1:3306`
 
 注意：
 
 - `web` 当前接口地址仍然是 `127.0.0.1:8080`
+- `server` 依赖外部 MySQL，启动前需要注入 `MYSQL_*` 环境变量
 - 所以浏览器从宿主机访问 `http://127.0.0.1:8081` 时，请求会打到宿主机映射出来的 `server:8080`
