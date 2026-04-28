@@ -577,23 +577,14 @@ class _SubResMgrPageState extends State<SubResMgrPage> {
         "${fluVer}\n"
         "${isOnlineBuild}\n");
 
-    BaseResult? result;
-    if (isOnlineBuild) {
-      result = await viewModel.modifyPatchOnLine(
-          bundle_id!,
-          name!,
-          ver!,
-          url!,
-          status!,
-          remark!,
-          viewModel.appId.toString(),
-          gitUrl!,
-          gitBranch!,
-          fluVer!);
-    } else {
-      result = await pubViewModel?.modifyPatchLocalFile(bundle_id!, name!, ver!,
-          url!, status!, remark!, viewModel.appId.toString());
-    }
+    final result = await viewModel.updatePatch(
+      bundleId: int.parse(bundle_id!),
+      patchUrl: url,
+      status: status?.toString(),
+      remark: remark,
+      bundleName: name,
+      bundleVersion: ver,
+    );
 
     var code = result?.status;
     var message = result?.message;

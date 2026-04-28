@@ -15,8 +15,8 @@ class BaseResult {
 
   static BaseResult fromMap(Map<String, dynamic> map) {
     BaseResult result = BaseResult();
-    result.status = '${map['status']}';
-    result.message = map['msg'];
+    result.status = '${map['code'] ?? map['status'] ?? ''}';
+    result.message = map['msg'] ?? map['message'] ?? '';
     result.data = map['data'];
     return result;
   }

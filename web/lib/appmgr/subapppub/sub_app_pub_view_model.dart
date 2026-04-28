@@ -14,7 +14,8 @@ class SubAppPubViewModel extends BaseViewModel {
   String? appDes;
 
   Future<void> createApp(appName, appInfo, appLogoUrl) async {
-    createAppResult = await api.createApp(appName, appInfo, appLogoUrl);
+    final result = await api.createApp(appName, appInfo, appLogoUrl);
+    createAppResult = result?.status == '0';
     this.appName = '';
     appDes = '';
     notifyListeners();

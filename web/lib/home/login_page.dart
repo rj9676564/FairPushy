@@ -22,7 +22,8 @@ class _LoginPageState extends State<LoginPage> {
       });
 
       if (response != null && response.status == '0') {
-        final token = response.data['token'];
+        final data = response.data as Map<String, dynamic>;
+        final token = data['token'];
         final prefs = await SharedPreferences.getInstance();
         await prefs.setString('token', token);
         await prefs.setString('username', _usernameController.text);
