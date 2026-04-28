@@ -15,8 +15,15 @@ class LoginPage extends FairServiceWidget {
       return ParamsError(msg: 'Username and password are required');
     }
 
-    final dao = UserDao();
-    final user = await dao.getByUsername(username);
+    User? user;
+    try {
+      await withTransaction<void>(() async {
+        final dao = UserDao();
+        user = await dao.getByUsername(username);
+      });
+    } catch (e) {
+      return ResponseError(msg: e.toString());
+    }
 
     if (user == null) {
       return ResponseError(msg: 'User not found');
@@ -46,24 +53,30 @@ class RegisterPage extends FairServiceWidget {
       return ParamsError(msg: 'Username and password are required');
     }
 
-    final dao = UserDao();
-    final existingUser = await dao.getByUsername(username);
-    if (existingUser != null) {
-      return ResponseError(msg: 'Username already exists');
-    }
-
-    final newUser = User(
-      userId: 0,
-      username: username,
-      password: AuthUtils.hashPassword(password),
-      role: role,
-    );
-
     try {
-      final userId = await dao.persist(newUser);
+      int? userId;
+      await withTransaction<void>(() async {
+        final dao = UserDao();
+        final existingUser = await dao.getByUsername(username);
+        if (existingUser != null) {
+          throw Exception('Username already exists');
+        }
+
+        final newUser = User(
+          userId: 0,
+          username: username,
+          password: AuthUtils.hashPassword(password),
+          role: role,
+        );
+        userId = await dao.persist(newUser);
+      });
       return ResponseSuccess(data: {'userId': userId});
     } catch (e) {
-      return ResponseError(msg: e.toString());
+      final message = e.toString();
+      if (message.contains('Username already exists')) {
+        return ResponseError(msg: 'Username already exists');
+      }
+      return ResponseError(msg: message);
     }
   }
 }
