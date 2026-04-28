@@ -18,7 +18,22 @@ class SubResMgrViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  Future<BaseResult?> updatePatch(dynamic params) async {
+  Future<BaseResult?> updatePatch({
+    required int bundleId,
+    String? patchUrl,
+    String? status,
+    String? remark,
+    String? bundleName,
+    String? bundleVersion,
+  }) async {
+    final params = <String, dynamic>{
+      'bundleId': bundleId,
+      'patchUrl': patchUrl,
+      'status': status,
+      'remark': remark,
+      'bundleName': bundleName,
+      'bundleVersion': bundleVersion,
+    };
     return api.updatePatch(params);
   }
 
