@@ -5,7 +5,7 @@ import 'package:HotUpdateService/server/fair_server_pages.dart';
 import 'package:HotUpdateService/server/src/get_server.dart';
 import 'package:HotUpdateService/utils/fair_logger.dart';
 import 'package:simple_mysql_orm/simple_mysql_orm.dart';
-import 'config.dart';
+import 'package:HotUpdateService/utils/config.dart';
 
 void main() async {
   LoggerInit();
@@ -19,7 +19,7 @@ void main() async {
   runApp(
     GetServer(
       getPages: AppPages.routes,
-      port: 8080,
+      port: Config.serverPort,
     ),
   );
   print("FairServer ready...");

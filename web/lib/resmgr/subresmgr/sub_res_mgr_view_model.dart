@@ -18,30 +18,23 @@ class SubResMgrViewModel extends BaseViewModel {
     notifyListeners();
   }
 
-  /**
-   * 修改补丁在线编译
-   */
-  Future<BaseResult?> modifyPatchOnLine(
-      String bundleId,
-      String moduleName,
-      String bundleVersion,
-      String patchUrl,
-      String patchStatus,
-      String patchRemark,
-      String appId,
-      String gitUrl,
-      String gitBranch,
-      String fluVer) async {
-    var params = {
-      'bundleId': bundleId,
-      'bundleName': moduleName,
-      'bundleVersion': bundleVersion,
-      'remark': patchRemark,
-      'appId': appId,
-      'patchGitUrl': gitUrl,
-      'patchGitBranch': gitBranch,
-      'flutterVersion': fluVer,
-    };
-    return api.creatAndBuildPatch(params);
+  Future<BaseResult?> updatePatch(dynamic params) async {
+    return api.updatePatch(params);
+  }
+
+  Future<BaseResult?> deletePatch(int bundleId) async {
+    final result = await api.deletePatch(bundleId);
+    if (result?.status == '0') {
+      await getPatchList({'appId': appId.toString()});
+    }
+    return result;
+  }
+
+  Future<BaseResult?> changePatchStatus(int bundleId, int status) async {
+    final result = await api.changePatchStatus(bundleId, status);
+    if (result?.status == '0') {
+      await getPatchList({'appId': appId.toString()});
+    }
+    return result;
   }
 }

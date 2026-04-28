@@ -39,61 +39,64 @@ class Api {
     return resListData;
   }
 
-  ///创建补丁 && 修改本地上传编译
-  Future<BaseResult?> createPatch(dynamic params) async {
-    var result =
-        await FairDio.instance.post('/web/create_patch', params: params);
-    return result;
-  }
-
-  ///创建并在线编译布丁 && 修改在线编译
-  Future<BaseResult?> creatAndBuildPatch(dynamic params) async {
-    var result =
-    await FairDio.instance.post('/web/create_patch_and_build', params: params);
-    return result;
-  }
-
   ///上传补丁文件
-  Future<dynamic> uploadPathFile(String fileName, formData) async {
+  Future<dynamic> uploadPathFile(formData) async {
     return await FairDio.instance.uploadFile(
-        '/kLRHgFeDkLkL/dynamics/' + fileName,
+        '/web/upload',
         data: formData,
         baseUrl: FairDio.uploadBaseUrl);
   }
 
   ///创建项目
-  Future<bool> createApp(
+  Future<BaseResult?> createApp(
       String appName, String appInfo, String appLogoUrl) async {
-    try {
-      Map<String, dynamic> params = <String, dynamic>{};
-      params['appName'] = appName;
-      params['appInfo'] = appInfo;
-      params['appLogoUrl'] = appLogoUrl;
-      var result =
-          await FairDio.instance.post('/web/createApp', params: params);
-      return result?.status == '0' ? true : false;
-    } catch (e) {
-      debugPrint(e.toString());
-      return false;
-    }
+    Map<String, dynamic> params = <String, dynamic>{};
+    params['appName'] = appName;
+    params['appInfo'] = appInfo;
+    params['appLogoUrl'] = appLogoUrl;
+    return await FairDio.instance.post('/web/createApp', params: params);
   }
 
-  ///获取资源列表
-  Future<ResListData?> getResList() async {
-    ResListData? resListData;
-    try {
-      Map<String, dynamic> params = <String, dynamic>{
-        'appId':'4',
-      };
-      var result =
-      await FairDio.instance.get('/web/module_patch', params: params);
-      var data = result?.data;
-      if (data is Map<String, dynamic>) {
-        resListData = ResListData.fromJson(data);
-      }
-    } catch (e) {
-      print(e.toString());
-    }
-    return resListData;
+  ///更新项目
+  Future<BaseResult?> updateApp(
+      int appId, String appName, String appInfo, String appLogoUrl) async {
+    Map<String, dynamic> params = <String, dynamic>{};
+    params['appId'] = appId;
+    params['appName'] = appName;
+    params['appInfo'] = appInfo;
+    params['appLogoUrl'] = appLogoUrl;
+    return await FairDio.instance.post('/web/updateApp', params: params);
+  }
+
+  ///删除项目
+  Future<BaseResult?> deleteApp(int appId) async {
+    Map<String, dynamic> params = <String, dynamic>{};
+    params['appId'] = appId;
+    return await FairDio.instance.post('/web/deleteApp', params: params);
+  }
+
+  ///创建补丁
+  Future<BaseResult?> createPatch(dynamic params) async {
+    return await FairDio.instance.post('/web/create_patch', params: params);
+  }
+
+  ///更新补丁
+  Future<BaseResult?> updatePatch(dynamic params) async {
+    return await FairDio.instance.post('/web/update_patch', params: params);
+  }
+
+  ///删除补丁
+  Future<BaseResult?> deletePatch(int bundleId) async {
+    Map<String, dynamic> params = <String, dynamic>{};
+    params['bundleId'] = bundleId;
+    return await FairDio.instance.post('/web/delete_patch', params: params);
+  }
+
+  ///更改补丁状态 (发布/回滚/下线)
+  Future<BaseResult?> changePatchStatus(int bundleId, int status) async {
+    Map<String, dynamic> params = <String, dynamic>{};
+    params['bundleId'] = bundleId;
+    params['status'] = status;
+    return await FairDio.instance.post('/web/patch_status', params: params);
   }
 }

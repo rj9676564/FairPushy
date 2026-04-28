@@ -8,7 +8,7 @@ import '../data/data_dao/record_model_dao.dart';
 * Created by Wang Meng on 2022/4/11.
 * Copyright © 2020 58. All rights reserved.
 * */
-class GetRecordPage extends FairServiceWidget {
+class GetRecordPage extends AuthenticatedFairServiceWidget {
   @override
   Future<ResponseBaseModel> service(Map? request_params) async {
     /*

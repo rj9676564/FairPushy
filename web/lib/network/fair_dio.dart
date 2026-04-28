@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'base_result.dart';
 
 class FairDio {
@@ -49,6 +50,17 @@ class FairDio {
     _dio = Dio(options);
 
     //添加拦截器
+    _dio.interceptors.add(InterceptorsWrapper(
+      onRequest: (options, handler) async {
+        final prefs = await SharedPreferences.getInstance();
+        final token = prefs.getString('token');
+        if (token != null) {
+          options.headers['Authorization'] = 'Bearer $token';
+        }
+        return handler.next(options);
+      },
+    ));
+
     _dio.interceptors.add(LogInterceptor(
       request: false,
       responseBody: true,

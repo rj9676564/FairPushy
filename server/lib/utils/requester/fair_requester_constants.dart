@@ -1,8 +1,10 @@
+import 'package:HotUpdateService/utils/config.dart';
+
 class FairRequesterConstants {
-  static const String baseUrl = 'http://127.0.0.1:8080';
-  static const String packingPlatformHost = 'http://127.0.0.1:8080';
-  static const String cdnFileHost = '';
-  static const String cdnTokenHost = '';
+  static String get baseUrl => 'http://127.0.0.1:${Config.serverPort}';
+  static String get packingPlatformHost => 'http://127.0.0.1:${Config.serverPort}';
+  static String get cdnFileHost => Config.cdnFileHost;
+  static String get cdnTokenHost => Config.cdnTokenHost;
 
   //上传文件私有写接口
   static String cdnUploadFile() {

@@ -55,10 +55,7 @@ class _SubResPubPageState extends State<SubResPubPage> {
         const SizedBox(
           height: 20,
         ),
-        _buildSwitchContent(context),
-        isOnlineBuild
-            ? _buildOnlineContentView(context)
-            : _buildLocalContentView(context),
+        _buildLocalContentView(context),
       ],
     );
   }
@@ -477,11 +474,7 @@ class _SubResPubPageState extends State<SubResPubPage> {
         children: [
           GestureDetector(
             onTap: () {
-              if (isOnlineBuild) {
-                createPatchAndBuild();
-              } else {
-                createPatch();
-              }
+              createPatch();
             },
             child: Container(
               width: 100,
@@ -502,52 +495,13 @@ class _SubResPubPageState extends State<SubResPubPage> {
     );
   }
 
-  Future<void> createPatchAndBuild() async {
-    BaseResult? result = await viewModel.createAndBuildPatch(
-      _versionController.text,
-      viewModel.appId.toString(),
-      _patchMarkController.text,
-      _moduleNameController.text,
-      _gitUrlController.text,
-      _gitBranchController.text,
-      _flutterVersionController.text,
-    );
-    var resultData = result?.status ?? "-1";
-    if (resultData == "0") {
-      Fluttertoast.showToast(
-          msg: "创建补丁成功",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM_RIGHT,
-          timeInSecForIosWeb: 1,
-          webBgColor: '#000000',
-          backgroundColor: black,
-          textColor: white,
-          fontSize: 16.0);
-
-      resMgrViewModel?.clickTabByName('资源管理');
-      return;
-    } else {
-      Fluttertoast.showToast(
-          msg: "创建补丁失败",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM_RIGHT,
-          timeInSecForIosWeb: 1,
-          webBgColor: '#000000',
-          backgroundColor: black,
-          textColor: white,
-          fontSize: 16.0);
-      return;
-    }
-  }
-
   Future<void> createPatch() async {
     BaseResult? result = await viewModel.createPatch(
         _versionController.text,
         viewModel.appId.toString(),
         _patchMarkController.text,
         _moduleNameController.text,
-        _urlController.text,
-        true);
+        _urlController.text);
     var resultData = result?.status ?? "-1";
     if (resultData == "0") {
       Fluttertoast.showToast(
@@ -564,7 +518,7 @@ class _SubResPubPageState extends State<SubResPubPage> {
       return;
     } else {
       Fluttertoast.showToast(
-          msg: "创建补丁失败",
+          msg: "创建补丁失败: ${result?.message}",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM_RIGHT,
           timeInSecForIosWeb: 1,

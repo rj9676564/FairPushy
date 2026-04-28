@@ -37,7 +37,7 @@ docker run -d \
   -p 8080:8080 \
   -e MYSQL_USER=fair_pushy \
   -e MYSQL_PASSWORD=replace_me \
-  -e MYSQL_HOST=127.0.0.1 \
+  -e MYSQL_HOST=host.docker.internal \
   -e MYSQL_PORT=3306 \
   -e MYSQL_DATABASE=fair_pushy \
   ghcr.io/<owner>/fairpushy-server:latest
@@ -92,7 +92,7 @@ docker run --rm \
   -p 8080:8080 \
   -e MYSQL_USER=fair_pushy \
   -e MYSQL_PASSWORD=replace_me \
-  -e MYSQL_HOST=127.0.0.1 \
+  -e MYSQL_HOST=host.docker.internal \
   -e MYSQL_PORT=3306 \
   -e MYSQL_DATABASE=fair_pushy \
   fairpushy-server:local
@@ -137,5 +137,7 @@ http://127.0.0.1:8081
 注意：
 
 - `docker-compose.yml` 只负责把基础环境拉起来
+- 当 MySQL 跑在宿主机上时，容器内不要把 `MYSQL_HOST` 写成 `127.0.0.1`
+- 推荐使用 `host.docker.internal` 作为宿主机地址
 - `MYSQL_USER`、`MYSQL_PASSWORD`、`MYSQL_HOST`、`MYSQL_DATABASE` 需要在启动前注入
 - 数据表仍然需要按 `server/README.md` 中的建表说明初始化

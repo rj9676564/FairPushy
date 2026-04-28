@@ -2,9 +2,7 @@ import 'package:fair_management_web/appmgr/app_mgr_page.dart';
 import 'package:fair_management_web/base/base_view_model.dart';
 import 'package:fair_management_web/common/api.dart';
 import 'package:fair_management_web/operationmgr/operation_mgr_page.dart';
-import 'package:fair_management_web/resbuild/res_build_page.dart';
-import 'package:fair_management_web/resmgr/res_mgr_page.dart';
-import 'package:fair_management_web/ressync/res_sync_page.dart';
+import 'package:fair_management_web/operationmgr/operation_mgr_page.dart';
 import 'package:flutter/cupertino.dart';
 
 class HomeViewModel extends BaseViewModel {
@@ -12,8 +10,6 @@ class HomeViewModel extends BaseViewModel {
   /// TAB List
   static const appList = [
     {'name': '项目管理', 'page': AppMgrPage()},
-    {'name': '资源构建', 'page': ResBuildPage()},
-    {'name': '资源同步', 'page': ResSyncPage()},
     {'name': '操作记录', 'page': OperationMgrPage()},
   ];
 

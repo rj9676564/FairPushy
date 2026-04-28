@@ -111,7 +111,7 @@ class _SubResMgrPageState extends State<SubResMgrPage> {
               buildItem(item.update_time?.toString()),
               buildItem(item.remark?.toString()),
               buildItem(item.patch_url?.toString()),
-              buildItemWithClick("编辑", item),
+              _buildActions(item),
             ])
         ],
       ),
@@ -120,11 +120,80 @@ class _SubResMgrPageState extends State<SubResMgrPage> {
 
   String _getStatusStringWithStatus(String? status) {
     if (status == '1') {
-      return "编译完成";
-    } else if (status == '2') {
-      return "在线编译中";
+      return "已发布";
+    } else if (status == '0') {
+      return "待发布";
+    } else if (status == '-1') {
+      return "已下线";
     } else {
-      return "编译失败";
+      return "未知($status)";
+    }
+  }
+
+  Widget _buildActions(ResListItemData item) {
+    return Container(
+      height: 100,
+      alignment: Alignment.center,
+      child: Wrap(
+        spacing: 8,
+        children: [
+          TextButton(
+            child: Text('编辑', style: TextStyle(fontSize: 12)),
+            onPressed: () => _showMyDialog(item),
+          ),
+          if (item.status != 1)
+            TextButton(
+              child: Text('发布', style: TextStyle(fontSize: 12, color: Colors.green)),
+              onPressed: () => _changeStatus(item.bundle_id!, 1),
+            ),
+          if (item.status == 1)
+            TextButton(
+              child: Text('撤回', style: TextStyle(fontSize: 12, color: Colors.orange)),
+              onPressed: () => _changeStatus(item.bundle_id!, 0),
+            ),
+          if (item.status != -1)
+            TextButton(
+              child: Text('下线', style: TextStyle(fontSize: 12, color: Colors.grey)),
+              onPressed: () => _changeStatus(item.bundle_id!, -1),
+            ),
+          TextButton(
+            child: Text('删除', style: TextStyle(fontSize: 12, color: Colors.red)),
+            onPressed: () => _deletePatch(item.bundle_id!),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _changeStatus(int bundleId, int status) async {
+    final result = await viewModel.changePatchStatus(bundleId, status);
+    if (result?.status == '0') {
+      Fluttertoast.showToast(msg: "操作成功");
+    } else {
+      Fluttertoast.showToast(msg: result?.message ?? "操作失败");
+    }
+  }
+
+  Future<void> _deletePatch(int bundleId) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('确认删除'),
+        content: Text('确定要删除此补丁吗？'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context, false), child: Text('取消')),
+          TextButton(onPressed: () => Navigator.pop(context, true), child: Text('删除', style: TextStyle(color: Colors.red))),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      final result = await viewModel.deletePatch(bundleId);
+      if (result?.status == '0') {
+        Fluttertoast.showToast(msg: "删除成功");
+      } else {
+        Fluttertoast.showToast(msg: result?.message ?? "删除失败");
+      }
     }
   }
 

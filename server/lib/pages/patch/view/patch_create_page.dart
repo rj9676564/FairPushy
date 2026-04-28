@@ -9,7 +9,7 @@ import '../data/data_model/patch_model.dart';
 * Created by Wang MingYu on 2022/5/11.
 * Copyright © 2022 58. All rights reserved.
 * */
-class CreatePatchPage extends FairServiceWidget {
+class CreatePatchPage extends AuthenticatedFairServiceWidget {
   @override
   Future<ResponseBaseModel> service(Map? request_params) async {
     /*

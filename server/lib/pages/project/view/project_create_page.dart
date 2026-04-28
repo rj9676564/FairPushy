@@ -9,7 +9,7 @@ import 'package:simple_mysql_orm/simple_mysql_orm.dart';
 * Created by Wang MingYu on 2022/4/11.
 * Copyright © 2020 58. All rights reserved.
 * */
-class CreateProjectPage extends FairServiceWidget {
+class CreateProjectPage extends AuthenticatedFairServiceWidget {
   @override
   Future<ResponseBaseModel> service(Map? request_params) async {
 

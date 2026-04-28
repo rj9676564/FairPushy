@@ -14,4 +14,22 @@ class SubAppMgrViewModel extends BaseViewModel {
     isLoad = false;
     notifyListeners();
   }
+
+  Future<bool> updateApp(int appId, String name, String info, String logo) async {
+    final result = await api.updateApp(appId, name, info, logo);
+    if (result?.status == '0') {
+      await getAppList();
+      return true;
+    }
+    return false;
+  }
+
+  Future<bool> deleteApp(int appId) async {
+    final result = await api.deleteApp(appId);
+    if (result?.status == '0') {
+      await getAppList();
+      return true;
+    }
+    return false;
+  }
 }

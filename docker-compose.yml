@@ -3,10 +3,12 @@ services:
     image: ghcr.io/rj9676564/fairpushy-server:latest
     container_name: fairpushy-server
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       MYSQL_USER: ${MYSQL_USER:?MYSQL_USER is required}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD:?MYSQL_PASSWORD is required}
-      MYSQL_HOST: ${MYSQL_HOST:?MYSQL_HOST is required}
+      MYSQL_HOST: ${MYSQL_HOST:-host.docker.internal}
       MYSQL_PORT: ${MYSQL_PORT:-3306}
       MYSQL_DATABASE: ${MYSQL_DATABASE:?MYSQL_DATABASE is required}
     ports:

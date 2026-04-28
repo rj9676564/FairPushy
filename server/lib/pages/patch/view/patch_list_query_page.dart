@@ -9,7 +9,7 @@ import '../data/data_dao/patch_model_dao.dart';
 * Created by Wang Meng on 2022/5/11.
 * Copyright © 2022 58. All rights reserved.
 * */
-class GetPatchListPage extends FairServiceWidget {
+class GetPatchListPage extends AuthenticatedFairServiceWidget {
   @override
   Future<ResponseBaseModel> service(Map? request_params) async {
     /*

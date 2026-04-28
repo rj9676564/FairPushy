@@ -1,4 +1,5 @@
 import 'package:fair_management_web/home/home_page.dart';
+import 'package:fair_management_web/home/login_page.dart';
 import 'package:fair_management_web/resmgr/res_mgr_page.dart';
 import 'package:fair_management_web/route/route_path.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,8 @@ class RouterManager {
             Animation<double> secondaryAnimation) {
           var uri = Uri.parse(settings.name ?? '');
           switch (uri.host) {
+            case RoutePath.login:
+              return LoginPage();
             case RoutePath.monitor:
             case RoutePath.home:
               return const HomePage();

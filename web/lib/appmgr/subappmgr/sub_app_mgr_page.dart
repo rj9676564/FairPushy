@@ -122,20 +122,38 @@ class _SubAppMgrPageState extends State<SubAppMgrPage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Container(
-          //   height: 54,
-          //   alignment: Alignment.center,
-          //   child: TextButton(
-          //     child: Text(
-          //       '编辑',
-          //       style: TextStyle(
-          //         fontSize: 14,
-          //         color: lightBlue,
-          //       ),
-          //     ),
-          //     onPressed: () {},
-          //   ),
-          // ),
+          Container(
+            height: 54,
+            alignment: Alignment.center,
+            child: TextButton(
+              child: Text(
+                '编辑',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: lightBlue,
+                ),
+              ),
+              onPressed: () {
+                _showEditDialog(item);
+              },
+            ),
+          ),
+          Container(
+            height: 54,
+            alignment: Alignment.center,
+            child: TextButton(
+              child: Text(
+                '删除',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.red,
+                ),
+              ),
+              onPressed: () {
+                _showDeleteConfirm(item);
+              },
+            ),
+          ),
           Container(
             height: 54,
             alignment: Alignment.center,
@@ -162,5 +180,65 @@ class _SubAppMgrPageState extends State<SubAppMgrPage> {
         ],
       ),
     ]);
+  }
+
+  void _showEditDialog(AppList item) {
+    final nameController = TextEditingController(text: item.appName);
+    final infoController = TextEditingController(text: item.appInfo);
+    final logoController = TextEditingController(text: item.appLogoUrl);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('编辑项目'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(controller: nameController, decoration: InputDecoration(labelText: '项目名称')),
+            TextField(controller: infoController, decoration: InputDecoration(labelText: '项目描述')),
+            TextField(controller: logoController, decoration: InputDecoration(labelText: 'Logo URL')),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('取消')),
+          TextButton(
+            onPressed: () async {
+              final success = await viewModel.updateApp(
+                item.appId!,
+                nameController.text,
+                infoController.text,
+                logoController.text,
+              );
+              if (success) {
+                Navigator.pop(context);
+              }
+            },
+            child: Text('保存'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showDeleteConfirm(AppList item) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('删除项目'),
+        content: Text('确定要删除项目 "${item.appName}" 吗？此操作不可恢复。'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: Text('取消')),
+          TextButton(
+            onPressed: () async {
+              final success = await viewModel.deleteApp(item.appId!);
+              if (success) {
+                Navigator.pop(context);
+              }
+            },
+            child: Text('删除', style: TextStyle(color: Colors.red)),
+          ),
+        ],
+      ),
+    );
   }
 }

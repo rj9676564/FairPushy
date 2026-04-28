@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        initialRoute: Uri(scheme: 'fair', host: RoutePath.home).toString(),
+        initialRoute: RoutePath.loginPath,
         onGenerateRoute: RouterManager.generateRoute,
       ),
     );
