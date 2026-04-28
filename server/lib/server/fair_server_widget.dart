@@ -17,6 +17,9 @@ abstract class FairServiceWidget extends GetView {
       return FutureBuilder(
           future: this.requestHandler(context.request),
           builder: (context, snapshot) {
+            if (snapshot?.hasError == true) {
+              return Error(error: snapshot!.error.toString());
+            }
             if (snapshot?.connectionState == ConnectionState.done) {
               return Success(data: snapshot?.data);
             } else {

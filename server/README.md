@@ -58,6 +58,12 @@ FairPushy工程可以直接运行启动测试服务仅需在控制台输入以�
 CREATE TABLE：[表结构](db_fair_dynamic_table.txt
 )
 
+注意：
+
+- 登录、注册接口依赖 `user` 表
+- 新环境初始化时，除了业务表，还需要执行 `init/01-schema.sql` 中的 `user` 建表语句
+- 如果库里还没有任何用户数据，`/web/login` 不会登录成功，需要先调用 `/web/register` 注册一个账号，或手动插入一条管理员记录
+
 #### 接口说明
 
 项目中主要提供Web平台的接口和移动端SDK调用接口一共大概10个左右，主流程接口如下：
@@ -69,7 +75,6 @@ CREATE TABLE：[表结构](db_fair_dynamic_table.txt
 | 3 |    /web/module_patch | 补丁列表   |
 | 4 |    /web/create_patch  | 上传补丁   |
 | 5 |    /web/operating_record  | 操作记录   |
-
 
 
 
