@@ -22,6 +22,22 @@ class ProjectDao extends Dao<Project> {
   /**
    * 通过app_id查询项目信息
    */
+  Future<Project?> getProjectByAppId(int appId) async {
+    final list =
+        await query('select * from $tablename where app_id = ?', [appId]);
+    return list.isNotEmpty ? list.first : null;
+  }
+
+  /**
+   * 更新项目信息
+   */
+  Future<void> updateByProject(Project project) async {
+    await update(project);
+  }
+
+  /**
+   * 通过app_id查询项目信息 (兼容旧代码)
+   */
   Future<List<Project>> search(String app_id) async =>
       query('select * from $tablename where app_id like ?', ['$app_id']);
 }

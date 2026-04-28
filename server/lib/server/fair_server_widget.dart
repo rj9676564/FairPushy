@@ -1,4 +1,6 @@
 import 'package:HotUpdateService/server/src/get_server.dart';
+import 'package:HotUpdateService/server/src/context/context_request.dart';
+import 'package:HotUpdateService/server/src/context/context_response.dart';
 import 'package:HotUpdateService/server/fair_server_response.dart';
 import 'package:HotUpdateService/utils/auth_utils.dart';
 import 'package:jaguar_jwt/jaguar_jwt.dart';
@@ -54,14 +56,15 @@ abstract class AuthenticatedFairServiceWidget extends FairServiceWidget {
   Future<Map<String, dynamic>> requestHandler(ContextRequest req) async {
     final authHeader = req.header('Authorization');
     if (authHeader == null || authHeader.isEmpty) {
-      return ResponseError(msg: 'Missing Authorization header', code: '401').toJson();
+      return ResponseError(msg: 'Missing Authorization header', code: 401)
+          .toJson();
     }
 
     final token = authHeader.first.replaceFirst('Bearer ', '');
     _authClaim = AuthUtils.verifyJwt(token);
 
     if (_authClaim == null) {
-      return ResponseError(msg: 'Invalid or expired token', code: '401').toJson();
+      return ResponseError(msg: 'Invalid or expired token', code: 401).toJson();
     }
 
     return super.requestHandler(req);
